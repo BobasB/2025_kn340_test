@@ -1,6 +1,6 @@
 import unittest
 from unittest.mock import patch
-from main import choose_secret_word, enter_letter_from_user, WORDS
+from main import *
 
 class TestWordChoice(unittest.TestCase):
     def test_choose_secret_word(self):
@@ -21,7 +21,62 @@ class TestEnterLetterFromUser(unittest.TestCase):
         #     self.assertEqual(enter_letter_from_user(), 'a')
         # finally:
         #     __builtins__.input = original_input
+
+class TestCheckLettersInWord(unittest.TestCase):
+    def test_all_letters_guessed(self):
+        """
+        Даний тест є валідним, тому ми його трохи переписали."""
+        test_word = 'apple'
+        self.assertEqual(
+            check_letters_in_word(set(test_word), test_word),
+            test_word
+        )
+
+    def test_no_letters_guessed(self):
+        self.assertEqual(
+            check_letters_in_word(set(), 'banana'),
+            '******'
+        )
+
+    def test_some_letters_guessed(self):
+        self.assertEqual(
+            check_letters_in_word({'a', 'n'}, 'banana'),
+            '*anana'
+        )
+
+    def test_repeated_letters(self):
+        self.assertEqual(
+            check_letters_in_word({'b', 'a'}, 'banana'),
+            'ba*a*a'
+        )
+
+    def test_empty_word(self):
+        """
+        Даний тест ми залишимо, але трохи модифікуємо."""
+        guess_letter = set("")
+        # Виловлюємо помилку
+        with self.assertRaises(ValueError):
+            check_letters_in_word(guess_letter, "")
+        # Перевіряємо текст помилки, що це саме наша помилка яку ми написали
+        with self.assertRaises(ValueError) as context:
+            check_letters_in_word(guess_letter, "")
+            self.assertEqual(str(context.exception), "Word cannot be empty")
+
     
+    def test_empty_letters(self):
+        """
+        Даний тест ми також залишимо та трохи модифікуємо.
+        Допишемо на наступний раз."""
+        test_word = 'test'
+        guess_letter = set("")
+        
+    
+        # self.assertIsInstance(guess_letter, set)
+        # self.assertEqual(
+        #     check_letters_in_word(set(""), test_word),
+        #     ''
+        # )
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
