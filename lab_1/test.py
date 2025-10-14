@@ -3,31 +3,37 @@ import unittest
 from unittest.mock import patch
 from main import *
 
-# class TestWordChoice(unittest.TestCase):
-#     def test_word_in_list(self):
-#         word = choose_secret_word(WORDS)
-#         self.assertIn(word, WORDS, f"Слово {word} має бути у списку {WORDS}")
+class TestWordChoice(unittest.TestCase):
+    def test_word_in_list(self):
+        """Перевіряємо чи вибране слово є в списку слів"""
+        word = choose_secret_word(WORDS)
+        self.assertIn(word, WORDS, f"Слово {word} має бути у списку {WORDS}")
 
-#     def test_word_is_string(self):
-#         word = choose_secret_word(WORDS)
-#         self.assertIsInstance(word, str, f"Слово {word} має бути рядком")
+    def test_word_is_string(self):
+        """Перевіряємо чи вибране слово є рядком"""
+        word = choose_secret_word(WORDS)
+        self.assertIsInstance(word, str, f"Слово {word} має бути рядком")
 
-#     def test_word_length(self):
-#         word = choose_secret_word(WORDS)
-#         self.assertGreater(len(word), 0, "Слово має бути не порожнім")
-#         self.assertLessEqual(len(word), 20, "Слово має бути не довшим за 20 символів")
+    def test_word_length(self):
+        """Перевіряємо довжину вибраного слова"""
+        word = choose_secret_word(WORDS)
+        self.assertGreater(len(word), 0, "Слово має бути не порожнім")
+        self.assertLessEqual(len(word), 20, "Слово має бути не довшим за 20 символів")
 
-#     def test_word_not_numeric(self):
-#         word = choose_secret_word(WORDS)
-#         self.assertFalse(word.isdigit(), f"Слово {word} не має бути числом")
+    def test_word_not_numeric(self):
+        """Перевіряємо чи вибране слово не є числом"""
+        word = choose_secret_word(WORDS)
+        self.assertFalse(word.isdigit(), f"Слово {word} не має бути числом")
 
-#     def test_word_not_empty(self):
-#         word = choose_secret_word(WORDS)
-#         self.assertNotEqual(word, "", "Слово не має бути порожнім")
+    def test_word_not_empty(self):
+        """Перевіряємо чи вибране слово не є порожнім"""
+        word = choose_secret_word(WORDS)
+        self.assertNotEqual(word, "", "Слово не має бути порожнім")
 
-#     def test_empty_list(self):
-#         with self.assertRaises(IndexError):
-#             choose_secret_word([])
+    def test_empty_list(self):
+        """Перевіряємо обробку порожнього списку слів"""
+        with self.assertRaises(IndexError):
+            choose_secret_word([])
 
 # class TestEnterLetterFromUser(unittest.TestCase):
 #     @patch('builtins.input', side_effect=['1', 'a'])
@@ -66,6 +72,8 @@ class TestCheckLettersInWord(unittest.TestCase):
 
         self.test_word = "".join(random.choices(list(letters_to_guess), k = random.randint(3, 8)))
         self.guess_letters = letters_to_guess
+        # Копіюємо класовий атрибут в атрибут екземпляра
+        self.empty_test_word = self.__class__.empty_test_word
         # Сетапимо пусті значення для тестів які перевіряють на порожні дані
         self.no_letters = set()
         return super().setUp()
@@ -74,7 +82,6 @@ class TestCheckLettersInWord(unittest.TestCase):
         print(">>> Видаляємо дані після тестів")
         self.test_word = None
         self.guess_letters = None
-        self.empty_test_word = None
         self.no_letters = None
         return super().tearDown()
 
@@ -86,10 +93,12 @@ class TestCheckLettersInWord(unittest.TestCase):
         >>>Цей тест готовий<<<
         """
         print("||| Починаємо процес тестування |||")
-        self.assertFalse(True) # Ми хочемо щоб цей тест завжди впав
+        #self.assertFalse(True) # Ми хочемо щоб цей тест завжди впав
         with self.assertRaises(ValueError):
             check_letters_in_word({'а', 'б', 'в'}, self.test_word)
-        self.assertTrue(len(check_letters_in_word({'a', 'b', 'c'}, self.test_word)) > 0)
+        result = check_letters_in_word({'a', 'b', 'c'}, self.test_word)
+        self.assertIsInstance(result, str)
+        self.assertTrue(len(result) > 0)
 
     def test_all_letters_guessed(self):
         """
@@ -100,8 +109,10 @@ class TestCheckLettersInWord(unittest.TestCase):
             test_word
         )
 
-    # def test_no_letters_guessed(self):
-    #     self.assertEqual(check_letters_in_word(set(), 'banana'), '******')
+    def test_no_letters_guessed(self):
+        """Перевіряємо випадок коли не вгадано жодної літери"""
+        with self.assertRaises(ValueError):
+            check_letters_in_word(set(), 'banana')
 
     def test_some_letters_guessed(self):
         self.assertEqual(check_letters_in_word({'a', 'n'}, 'banana'), '*anana')
@@ -169,9 +180,56 @@ class TestCheckLettersInWord(unittest.TestCase):
         # Якшо буква буде (при правильних даних) то функція щось поверне
         self.assertTrue(len(check_letters_in_word({'a'}, self.test_word)) > 0)
 
-    # def test_letters_not_in_word(self):
-    #     word = "НеПустеСлово"
-    #     self.assertEqual(len(check_letters_in_word({'a'}, word)))
+class TestCheckIfWordGuessed(unittest.TestCase):
+    """Тести для перевірки функції check_if_word_guessed"""
+    
+    def setUp(self):
+        """Підготовка даних для кожного тесту"""
+        print(">>> Підготовка даних для тестів check_if_word_guessed")
+        self.test_word = "test"
+        self.all_letters = set(self.test_word)
+        self.partial_letters = {'t', 'e'}
+        self.no_letters = set()
+        self.extra_letters = set('testzxy')
+        return super().setUp()
+    
+    def tearDown(self):
+        """Очищення даних після кожного тесту"""
+        print(">>> Очищення даних після тестів check_if_word_guessed")
+        self.test_word = None
+        self.all_letters = None
+        self.partial_letters = None
+        self.no_letters = None
+        self.extra_letters = None
+        return super().tearDown()
+    
+    def test_word_fully_guessed(self):
+        """Перевіряємо випадок коли всі літери вгадано"""
+        self.assertTrue(
+            check_if_word_guessed(self.all_letters, self.test_word),
+            f"Всі літери {self.all_letters} мають бути вгадані у слові {self.test_word}"
+        )
+    
+    def test_word_partially_guessed(self):
+        """Перевіряємо випадок коли вгадано не всі літери"""
+        self.assertFalse(
+            check_if_word_guessed(self.partial_letters, self.test_word),
+            f"Не всі літери {self.partial_letters} вгадані у слові {self.test_word}"
+        )
+    
+    def test_no_letters_guessed(self):
+        """Перевіряємо випадок коли не вгадано жодної літери"""
+        self.assertFalse(
+            check_if_word_guessed(self.no_letters, self.test_word),
+            f"Порожній набір літер {self.no_letters} не може вгадати слово {self.test_word}"
+        )
+    
+    def test_extra_letters_guessed(self):
+        """Перевіряємо випадок коли вгадано зайві літери"""
+        self.assertTrue(
+            check_if_word_guessed(self.extra_letters, self.test_word),
+            f"Додаткові літери у наборі {self.extra_letters} не мають впливати на вгадування слова {self.test_word}"
+        )
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
