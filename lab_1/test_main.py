@@ -1,7 +1,8 @@
 import random
 import unittest
 from unittest.mock import patch
-from main import *
+from lab_1.main import *
+from lab_1.file_module import func_for_module_import
 
 class TestWordChoice(unittest.TestCase):
     def test_word_in_list(self):
