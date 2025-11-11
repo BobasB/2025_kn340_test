@@ -5,11 +5,11 @@ INITIAL_WORDS = ["apple", "banana", "cherry", "orange", "Python", "Developer", "
 
 def get_n_random_words(n: int) -> list:
     if n > len(INITIAL_WORDS):
-        raise ValueError("Requested number of words exceeds available words.")
+        raise ValueError("Кількість слів перевищує доступну.")
     return [w.lower() for w in random.sample(INITIAL_WORDS, n)]
 
 def func_for_module_import():
-    return "This function is for module import testing."
+    return "Ця функція призначена для тестування імпорту модуля."
 
 def test_func_return_value():
     """
