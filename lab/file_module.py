@@ -5,7 +5,16 @@ INITIAL_WORDS = ["apple", "banana", "cherry", "orange", "Python", "Developer", "
 
 def get_n_random_words(n: int) -> list:
     if n > len(INITIAL_WORDS):
+        print("Неможливо згенерувати стільки слів.")
         raise ValueError("Кількість слів перевищує доступну.")
+    elif not isinstance(n, int):
+        print("Введено некоректне значення для кількості слів.")
+        raise ValueError("n має бути додатним цілим числом.")
+    elif n <= 0:
+        print("Кількість слів має бути додатним цілим числом.")
+        raise ValueError("n має бути додатним цілим числом.")
+    else:
+        print(f"Генерація {n} випадкових слів.")
     return [w.lower() for w in random.sample(INITIAL_WORDS, n)]
 
 def func_for_module_import():
