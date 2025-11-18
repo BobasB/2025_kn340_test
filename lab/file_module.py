@@ -1,7 +1,9 @@
 # Цей модуль буде відповідати за генерацію слів які потрібно вгадати
 import random
 
-INITIAL_WORDS = ["apple", "banana", "cherry", "orange", "Python", "Developer", "function", "variable", "iteration", "condition"]
+INITIAL_WORDS = ["apple", "banana", "cherry", "orange", 
+                 "Python", "Developer", "function", "variable", 
+                 "iteration", "condition"]
 
 def get_n_random_words(n: int) -> list:
     if n > len(INITIAL_WORDS):
