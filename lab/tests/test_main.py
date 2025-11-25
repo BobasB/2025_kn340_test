@@ -5,6 +5,10 @@ from lab.main import *
 from lab.file_module import func_for_module_import
 
 
+def test_always_failed_for_ci_demo():
+    # Цей тест завжди падає для демонстрації CI
+    assert False, "Цей тест завжди падає для демонстрації CI"
+
 def test_func_check_if_word_guessed():
     # Тест який перевіряє чи при виклику функції був здійснений вивід через print
     # print буде викликатись тільки при правильно взагадних буквах
