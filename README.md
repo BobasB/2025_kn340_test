@@ -5,6 +5,7 @@
 | **Top Language** | ![GitHub top language](https://img.shields.io/github/languages/top/BobasB/2025_kn340_test?color=green) |
 | **Workflow Status** | ![GitHub Actions Workflow Status](https://img.shields.io/github/actions/workflow/status/BobasB/2025_kn340_test/python-app.yml?style=for-the-badge) |
 | **Tests** | [![Github Badge](https://github.com/BobasB/2025_kn340_test/actions/workflows/python-app.yml/badge.svg)](https://github.com/BobasB/2025_kn340_test/actions/workflows/python-app.yml) |
+| **Code Coverage** | [![codecov](https://codecov.io/gh/BobasB/2025_kn340_test/graph/badge.svg?token=6GMP7NINYH)](https://codecov.io/gh/BobasB/2025_kn340_test) |
 
 Репозиторій для роботи з групою КН-340
 
